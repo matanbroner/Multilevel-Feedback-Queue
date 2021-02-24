@@ -6,21 +6,45 @@
 #define MLFQ_PROCESS_H
 
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
-enum operation{CPU, IO};
+const int PROCESS_OP_COUNT = 4;
 
-struct ProcessOperation {
-    enum operation op_type;
-    int length;
+enum operationType
+{
+    CPU,
+    IO
 };
 
-struct Process {
+typedef struct ProcessOperation
+{
+    enum operationType opType;
+    int timeLength;
+} ProcessOperation;
+
+typedef struct Process
+{
     int pid;
-    int cpu_use;
-    struct ProcessOperation ops[3];
-};
+    int cpuUsage;
+    struct ProcessOperation *ops;
+} Process;
 
-struct Process* createProcess();
-struct Process* createSeededProcess();
+// used for process tracking and queues
+
+typedef struct ProcessListNode
+{
+    struct Process *process;
+    struct ProcessListNode *prev;
+    struct ProcessListNode *next;
+} ProcessListNode;
+
+struct Process *createProcess();
+void printProcess(Process *);
+void deleteProcess(Process *);
+
+ProcessListNode *createProcessList(Process *);
+void addProcessNode(ProcessListNode *, Process *);
+void removeProcessNode(ProcessListNode *);
 
 #endif //MLFQ_PROCESS_H
