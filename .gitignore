@@ -1,6 +1,7 @@
 .idea
 .vscode
 mlfq
+cmake-build-debug
 
 # Prerequisites
 *.d
