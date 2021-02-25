@@ -7,44 +7,52 @@
 
 #include "util.h"
 
-enum operationType
-{
+const int PROCESS_OP_COUNT;
+
+enum operationType {
     CPU,
     IO
 };
 
-typedef struct ProcessOperation
-{
+typedef struct ProcessOperation {
     enum operationType opType;
     int timeLength;
 } ProcessOperation;
 
-typedef struct Process
-{
+typedef struct Process {
     int pid;
     int cpuUsage;
     struct ProcessOperation *ops;
+    int activeOp;
+    int startIOTime;
 } Process;
 
 // used for process tracking and queues
 
-typedef struct ProcessListNode
-{
+typedef struct ProcessListNode {
     struct Process *process;
     struct ProcessListNode *prev;
     struct ProcessListNode *next;
 } ProcessListNode;
 
 struct Process *createProcess();
+
 void printProcess(Process *);
+
 void deleteProcess(Process *);
 
 ProcessListNode *createProcessList(Process *);
+
 ProcessListNode *createRandomProcessList(int);
+
 void addProcessNode(ProcessListNode *, Process *);
+
 void removeProcessNode(ProcessListNode *, int);
+
 ProcessListNode *setNext(ProcessListNode *);
+
 ProcessListNode *setPrev(ProcessListNode *);
+
 void deleteProcessList(ProcessListNode *);
 
 #endif //MLFQ_PROCESS_H

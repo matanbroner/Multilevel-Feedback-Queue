@@ -15,6 +15,7 @@ typedef struct MLFQ
     QueueWrapper* q3;
     QueueWrapper* activeQueue;
     int timeSliceMultiplier;
+    int queueCount;
 } MLFQ;
 
 struct MLFQ* createMLFQ();
