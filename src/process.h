@@ -5,11 +5,7 @@
 #ifndef MLFQ_PROCESS_H
 #define MLFQ_PROCESS_H
 
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-
-const int PROCESS_OP_COUNT = 4;
+#include "util.h"
 
 enum operationType
 {
@@ -44,7 +40,11 @@ void printProcess(Process *);
 void deleteProcess(Process *);
 
 ProcessListNode *createProcessList(Process *);
+ProcessListNode *createRandomProcessList(int);
 void addProcessNode(ProcessListNode *, Process *);
-void removeProcessNode(ProcessListNode *);
+void removeProcessNode(ProcessListNode *, int);
+ProcessListNode *setNext(ProcessListNode *);
+ProcessListNode *setPrev(ProcessListNode *);
+void deleteProcessList(ProcessListNode *);
 
 #endif //MLFQ_PROCESS_H
