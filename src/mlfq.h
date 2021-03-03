@@ -3,25 +3,18 @@
 
 #include "process.h"
 
-typedef struct QueueWrapper {
-    ProcessListNode* queue;
-    int tag;
-} QueueWrapper;
-
-typedef struct MLFQ
-{
-    QueueWrapper* q1;
-    QueueWrapper* q2;
-    QueueWrapper* q3;
-    QueueWrapper* activeQueue;
+typedef struct MLFQ {
+    ProcessListNode *readyQueue;
+    ProcessListNode *IOQueue;
     int timeSliceMultiplier;
     int queueCount;
 } MLFQ;
 
-struct MLFQ* createMLFQ();
-void run(MLFQ*);
+struct MLFQ *createMLFQ();
 
-void deleteMLFQ(MLFQ*);
+void run(MLFQ *);
+
+void deleteMLFQ(MLFQ *);
 
 
 #endif 

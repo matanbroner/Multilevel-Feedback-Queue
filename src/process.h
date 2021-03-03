@@ -24,7 +24,8 @@ typedef struct Process {
     int cpuUsage;
     struct ProcessOperation *ops;
     int activeOp;
-    int startIOTime;
+    int returnFromIO;
+    int priority;
 } Process;
 
 // used for process tracking and queues
@@ -39,6 +40,8 @@ struct Process *createProcess();
 
 void printProcess(Process *);
 
+void printProcessList(ProcessListNode *);
+
 void deleteProcess(Process *);
 
 ProcessListNode *createProcessList(Process *);
@@ -52,6 +55,10 @@ void removeProcessNode(ProcessListNode *, int);
 ProcessListNode *setNext(ProcessListNode *);
 
 ProcessListNode *setPrev(ProcessListNode *);
+
+int getCurrentOpTimeLength(Process *);
+
+int processIsIO(Process *);
 
 void deleteProcessList(ProcessListNode *);
 

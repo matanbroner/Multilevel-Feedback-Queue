@@ -43,17 +43,29 @@ struct Process *createProcess() {
     p->pid = randomInRange(1000, 9999);
     p->ops = createProcessOperations();
     p->activeOp = 0;
+    p->returnFromIO = -1;
+    p->priority = 1; // start in q1
     return p;
 }
 
 void printProcess(Process *process) {
     const char *stringEnumTypes[2] = {"CPU", "IO"};
-    printf("PID: %d\n", process->pid);
-    printf("Ops:\n");
+    printf("| PID: %d ", process->pid);
     for (int i = 0; i < PROCESS_OP_COUNT; i++) {
-        printf("\t- Type: %s, Time-Length: %d\n", stringEnumTypes[process->ops[i].opType], process->ops[i].timeLength);
+        printf("| (%d) %s - %d ms ", i + 1, process->ops[i].opType == IO ? "IO " : "CPU",
+               process->ops[i].timeLength);
+    }
+    printf("|\n");
+}
+
+void printProcessList(ProcessListNode *head) {
+    ProcessListNode *iter = head;
+    while (iter != NULL) {
+        printProcess(iter->process);
+        iter = iter->next;
     }
 }
+
 
 void deleteProcess(Process *process) {
     free(process->ops);
@@ -102,6 +114,7 @@ void removeProcessNode(ProcessListNode *node, int shouldDeleteProcess) {
         node->next->prev = node->prev;
     }
     free(node);
+    node = NULL;
 }
 
 ProcessListNode *setNext(ProcessListNode *node) {
@@ -118,6 +131,21 @@ ProcessListNode *setPrev(ProcessListNode *node) {
     }
     return node->prev;
 }
+
+int getCurrentOpTimeLength(Process *process) {
+    if (process == NULL || process->activeOp >= PROCESS_OP_COUNT) {
+        die("Called getCurrentOpTimeLength on process which has no ops left or is NULL");
+    }
+    return process->ops[process->activeOp].timeLength;
+}
+
+int processIsIO(Process *process) {
+    if (process == NULL || process->activeOp >= PROCESS_OP_COUNT) {
+        die("Called processIsIO on process which has no ops left or is NULL");
+    }
+    return process->ops[process->activeOp].opType == IO;
+}
+
 
 void deleteProcessList(ProcessListNode *node) {
     if (node == NULL) {
